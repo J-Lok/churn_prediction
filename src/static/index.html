@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnRadar | Prédiction du Désabonnement Client</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-satellite-dish fa-spin-pulse"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Churn<span>Radar</span></h1>
+                    <p>Système Prédictif d'Attrition Client</p>
+                </div>
+            </div>
+            <nav class="app-tabs">
+                <button class="tab-btn active" data-tab="tab-predictor">
+                    <i class="fa-solid fa-user-check"></i> Predictor
+                </button>
+                <button class="tab-btn" data-tab="tab-analytics">
+                    <i class="fa-solid fa-chart-line"></i> Performance
+                </button>
+                <button class="tab-btn" data-tab="tab-insights">
+                    <i class="fa-solid fa-lightbulb"></i> Insights
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- TAB 1: PREDICTOR -->
+            <section id="tab-predictor" class="tab-content active">
+                <div class="grid-layout">
+                    <!-- Column 1: Input Form -->
+                    <div class="card glass form-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-sliders"></i> Profil du Client</h2>
+                            <p>Saisissez les caractéristiques du compte client pour évaluer le risque de départ.</p>
+                        </div>
+                        <form id="predictor-form">
+                            <!-- Section: Démographie -->
+                            <fieldset>
+                                <legend><i class="fa-solid fa-user"></i> Démographie</legend>
+                                <div class="form-group-row">
+                                    <div class="form-group">
+                                        <label for="gender">Sexe</label>
+                                        <select id="gender" name="gender" required>
+                                            <option value="Male">Homme</option>
+                                            <option value="Female">Femme</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="SeniorCitizen">Senior Citizen</label>
+                                        <select id="SeniorCitizen" name="SeniorCitizen" required>
+                                            <option value="0">Non</option>
+                                            <option value="1">Oui</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group-row">
+                                    <div class="form-group">
+                                        <label for="Partner">Partenaire (Couple)</label>
+                                        <select id="Partner" name="Partner" required>
+                                            <option value="No">Non</option>
+                                            <option value="Yes">Oui</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Dependents">Personnes à Charge</label>
+                                        <select id="Dependents" name="Dependents" required>
+                                            <option value="No">Non</option>
+                                            <option value="Yes">Oui</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <!-- Section: Services -->
+                            <fieldset>
+                                <legend><i class="fa-solid fa-handshake"></i> Services Souscrits</legend>
+                                <div class="form-group-row">
+                                    <div class="form-group">
+                                        <label for="PhoneService">Service Téléphonique</label>
+                                        <select id="PhoneService" name="PhoneService" required>
+                                            <option value="Yes">Oui</option>
+                                            <option value="No">Non</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="MultipleLines">Lignes Multiples</label>
+                                        <select id="MultipleLines" name="MultipleLines" required>
+                                            <option value="No">Non</option>
+                                            <option value="Yes">Oui</option>
+                                            <option value="No phone service">Pas de service tél.</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group-row">
+                                    <div class="form-group">
+                                        <label for="InternetService">Service Internet</label>
+                                        <select id="InternetService" name="InternetService" required>
+                                            <option value="Fiber optic">Fibre Optique</option>
+                                            <option value="DSL">DSL</option>
+                                            <option value="No">Aucun</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="OnlineSecurity">Sécurité en Ligne</label>
+                                        <select id="OnlineSecurity" name="OnlineSecurity" required>
+                                            <option value="No">Non</option>
+                                            <option value="Yes">Oui</option>
+                                            <option value="No internet service">Pas de service internet</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group-row">
+                                    <div class="form-group">
+                                        <label for="OnlineBackup">Sauvegarde en Ligne</label>
+                                        <select id="OnlineBackup" name="OnlineBackup" required>
+                                            <option value="No">Non</option>
+                                            <option value="Yes">Oui</option>
+                                            <option value="No internet service">Pas de service internet</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="DeviceProtection">Protection de l'Appareil</label>
+                                        <select id="DeviceProtection" name="DeviceProtection" required>
+                                            <option value="No">Non</option>
+                                            <option value="Yes">Oui</option>
+                                            <option value="No internet service">Pas de service internet</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group-row">
+                                    <div class="form-group">
+                                        <label for="TechSupport">Assistance Technique</label>
+                                        <select id="TechSupport" name="TechSupport" required>
+                                            <option value="No">Non</option>
+                                            <option value="Yes">Oui</option>
+                                            <option value="No internet service">Pas de service internet</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="StreamingTV">TV en Streaming</label>
+                                        <select id="StreamingTV" name="StreamingTV" required>
+                                            <option value="No">Non</option>
+                                            <option value="Yes">Oui</option>
+                                            <option value="No internet service">Pas de service internet</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="StreamingMovies">Films en Streaming</label>
+                                    <select id="StreamingMovies" name="StreamingMovies" required>
+                                        <option value="No">Non</option>
+                                        <option value="Yes">Oui</option>
+                                        <option value="No internet service">Pas de service internet</option>
+                                    </select>
+                                </div>
+                            </fieldset>
+
+                            <!-- Section: Compte & Facturation -->
+                            <fieldset>
+                                <legend><i class="fa-solid fa-file-invoice-dollar"></i> Contrat & Facturation</legend>
+                                <div class="form-group-row">
+                                    <div class="form-group">
+                                        <label for="Contract">Type de Contrat</label>
+                                        <select id="Contract" name="Contract" required>
+                                            <option value="Month-to-month">Mois par mois</option>
+                                            <option value="One year">Un an</option>
+                                            <option value="Two year">Deux ans</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="PaperlessBilling">Facturation Sans Papier</label>
+                                        <select id="PaperlessBilling" name="PaperlessBilling" required>
+                                            <option value="Yes">Oui</option>
+                                            <option value="No">Non</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="PaymentMethod">Mode de Paiement</label>
+                                    <select id="PaymentMethod" name="PaymentMethod" required>
+                                        <option value="Electronic check">Chèque électronique</option>
+                                        <option value="Mailed check">Chèque postal</option>
+                                        <option value="Bank transfer">Virement bancaire</option>
+                                        <option value="Credit card">Carte de crédit</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Numeric Inputs via sliders -->
+                                <div class="form-group">
+                                    <div class="slider-label-row">
+                                        <label for="tenure">Ancienneté (Mois):</label>
+                                        <span id="tenure-val" class="slider-val">12</span>
+                                    </div>
+                                    <input type="range" id="tenure" name="tenure" min="0" max="72" value="12" class="slider">
+                                </div>
+                                <div class="form-group">
+                                    <div class="slider-label-row">
+                                        <label for="MonthlyCharges">Frais Mensuels ($):</label>
+                                        <span id="MonthlyCharges-val" class="slider-val">65.00</span>
+                                    </div>
+                                    <input type="range" id="MonthlyCharges" name="MonthlyCharges" min="18" max="120" step="0.5" value="65" class="slider">
+                                </div>
+                                <div class="form-group">
+                                    <div class="slider-label-row">
+                                        <label for="TotalCharges">Frais Totaux ($):</label>
+                                        <span id="TotalCharges-val" class="slider-val">780.00</span>
+                                    </div>
+                                    <input type="number" id="TotalCharges" name="TotalCharges" min="0" step="1" value="780" class="num-input">
+                                    <div class="calc-box">
+                                        <button type="button" id="calc-total-btn" class="mini-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> Estimer les frais totaux</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <button type="submit" class="submit-btn">
+                                <i class="fa-solid fa-bolt"></i> Calculer le Risque d'Attrition
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Column 2: Output Gauge & Factors -->
+                    <div class="result-column">
+                        <div class="card glass result-card" id="result-placeholder">
+                            <div class="placeholder-content">
+                                <i class="fa-solid fa-calculator fa-fade placeholder-icon"></i>
+                                <h3>En attente de calcul...</h3>
+                                <p>Remplissez le formulaire et cliquez sur "Calculer le Risque" pour voir les probabilités et analyses détaillées.</p>
+                            </div>
+                        </div>
+
+                        <div class="card glass result-card hidden" id="result-display">
+                            <div class="card-header">
+                                <h2><i class="fa-solid fa-chart-pie"></i> Diagnostic de Risque</h2>
+                            </div>
+                            
+                            <!-- Gauge Grid -->
+                            <div class="models-grid">
+                                <!-- Logistic Regression Gauge (Primary Model) -->
+                                <div class="gauge-box primary-gauge">
+                                    <h3>Régression Logistique (Principal)</h3>
+                                    <div class="circle-gauge">
+                                        <svg viewBox="0 0 100 100" class="gauge-svg">
+                                            <circle cx="50" cy="50" r="42" class="gauge-bg-circle"></circle>
+                                            <circle cx="50" cy="50" r="42" class="gauge-fill-circle" id="lr-fill-circle"></circle>
+                                        </svg>
+                                        <div class="gauge-text">
+                                            <span id="lr-prob-val">0.0%</span>
+                                        </div>
+                                    </div>
+                                    <div class="risk-label" id="lr-risk-label">RISQUE FAIBLE</div>
+                                </div>
+                            </div>
+
+                            <div class="other-models-row">
+                                <div class="mini-model-box">
+                                    <h4>Réseau de Neurones</h4>
+                                    <span class="mini-prob" id="nn-prob-val">0.0%</span>
+                                    <div class="mini-progress-bar">
+                                        <div class="mini-progress-fill" id="nn-progress-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="mini-model-box">
+                                    <h4>K-Nearest Neighbors</h4>
+                                    <span class="mini-prob" id="knn-prob-val">0.0%</span>
+                                    <div class="mini-progress-bar">
+                                        <div class="mini-progress-fill" id="knn-progress-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Positive & Negative Factors -->
+                            <div class="factors-section">
+                                <h3><i class="fa-solid fa-circle-info"></i> Facteurs Clés d'Influence</h3>
+                                <div class="factors-container">
+                                    <div class="factor-column negative-factors">
+                                        <h4><i class="fa-solid fa-circle-check text-green"></i> Facteurs de Fidélisation</h4>
+                                        <ul id="retention-list">
+                                            <!-- Dynamically filled -->
+                                        </ul>
+                                    </div>
+                                    <div class="factor-column positive-factors">
+                                        <h4><i class="fa-solid fa-triangle-exclamation text-red"></i> Facteurs de Risque (Désabonnement)</h4>
+                                        <ul id="risk-list">
+                                            <!-- Dynamically filled -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: ANALYTICS -->
+            <section id="tab-analytics" class="tab-content">
+                <div class="analytics-layout">
+                    <div class="card glass chart-card full-width">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-code-compare"></i> Comparaison des Performances des Modèles</h2>
+                            <p>Visualisation des courbes ROC et Precision-Recall calculées sur le jeu de test.</p>
+                        </div>
+                        <div class="charts-row">
+                            <div class="chart-container">
+                                <h3>Courbe ROC (Receiver Operating Characteristic)</h3>
+                                <canvas id="roc-chart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <h3>Courbe Precision-Recall (PR)</h3>
+                                <canvas id="pr-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card glass metrics-card full-width">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-table-list"></i> Table de Comparaison des Métriques</h2>
+                        </div>
+                        <div class="table-container">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>Modèle</th>
+                                        <th>Accuracy</th>
+                                        <th>F1-Score</th>
+                                        <th>ROC AUC</th>
+                                        <th>PR AUC</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="metrics-table-body">
+                                    <tr>
+                                        <td colspan="5" class="text-center"><i class="fa-solid fa-circle-notch fa-spin"></i> Chargement des données de performance...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card glass full-width">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-grid-2"></i> Matrices de Confusion</h2>
+                            <p>Distribution des Vrais/Faux Positifs et Vrais/Faux Négatifs pour chaque algorithme.</p>
+                        </div>
+                        <div class="confusion-matrices-container" id="cm-container">
+                            <!-- Dynamically generated confusion matrices -->
+                            <div class="text-center py-4"><i class="fa-solid fa-circle-notch fa-spin"></i> Chargement des matrices...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: INSIGHTS -->
+            <section id="tab-insights" class="tab-content">
+                <div class="insights-layout">
+                    <div class="card glass full-width">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-chart-bar"></i> Importances des Variables (Facteurs Globaux)</h2>
+                            <p>Poids des coefficients issus de la Régression Logistique pour cibler les causes principales de désabonnement.</p>
+                        </div>
+                        <div class="feature-importance-layout">
+                            <div class="chart-container large-chart">
+                                <canvas id="importance-chart"></canvas>
+                            </div>
+                            <div class="insights-text-box">
+                                <h3><i class="fa-solid fa-circle-info text-blue"></i> Principales Conclusions</h3>
+                                <ul>
+                                    <li><strong>Contrat Mois par Mois :</strong> C'est la variable avec le coefficient positif le plus fort. Les clients sans engagement à long terme ont une probabilité extrêmement élevée d'attrition.</li>
+                                    <li><strong>Fibre Optique :</strong> Le service Internet par fibre présente paradoxalement un fort taux de départ, souvent corrélé à des frais mensuels élevés ou à des insatisfactions initiales.</li>
+                                    <li><strong>Ancienneté (Tenure) :</strong> Présente le coefficient négatif le plus fort. Plus le client reste longtemps, plus il devient fidèle et moins il est sensible au désabonnement.</li>
+                                    <li><strong>Assistance & Sécurité :</strong> L'absence d'Assistance Technique (TechSupport_No) et de Sécurité en Ligne (OnlineSecurity_No) augmentent grandement le risque, suggérant l'utilité de proposer ces services pour retenir les clients.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer-bar">
+            <p>&copy; 2026 Projet Churn Prediction (TP ML & Deep Learning) - Conçu pour une excellence opérationnelle.</p>
+        </footer>
+    </div>
+
+    <!-- Script file -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
